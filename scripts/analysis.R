@@ -14,7 +14,6 @@ data(airway, package="airway")
 dds <- DESeqDataSet(airway, design = ~ dex)
 
 # 3. Pre-filtering
-# Usuwamy geny o niskiej ekspresji, aby zwiększyć moc testów statystycznych
 keep <- rowSums(counts(dds)) >= 10
 dds <- dds[keep,]
 
@@ -24,17 +23,17 @@ dds <- DESeq(dds)
 # 5. Pobieranie wyników
 res <- results(dds, contrast=c("dex", "trt", "untrt"))
 
-# --- 6. ADNOTACJA (Kluczowe dla biologa i na egzamin!) ---
+# --- 6. ADNOTACJA ---
 message("Adnotacja genów: Mapowanie Ensembl na Symbole...")
 
-# Dodajemy kolumnę z czytelną nazwą genu (Symbol)
+# Dodajemy kolumnę z czytelną nazwą genu
 res$symbol <- mapIds(org.Hs.eg.db,
                      keys=rownames(res),
                      column="SYMBOL",
                      keytype="ENSEMBL",
                      multiVals="first")
 
-# Dodajemy kolumnę Entrez ID (przydatne do szlaków sygnałowych)
+# Dodajemy kolumnę Entrez ID
 res$entrez <- mapIds(org.Hs.eg.db,
                      keys=rownames(res),
                      column="ENTREZID",
@@ -49,7 +48,7 @@ message("Generowanie wykresów...")
 png("/home/analysis/results/volcano_plot.png", width=800, height=800)
 
 EnhancedVolcano(res,
-    lab = res$symbol,    # Teraz na wykresie będą nazwy genów!
+    lab = res$symbol,
     x = 'log2FoldChange',
     y = 'pvalue',
     title = 'Analiza ekspresji różnicowej: Airway dataset',
