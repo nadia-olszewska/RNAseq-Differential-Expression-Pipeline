@@ -1,0 +1,12 @@
+# Dane (Często zbyt duże lub wrażliwe)
+data/*
+!data/README.md
+
+# Wyniki (Nie wysyłamy wyników, bo kod ma je generować automatycznie)
+results/*
+!results/.gitkeep
+
+# Systemowe i tymczasowe
+.Rhistory
+.RData
+.vscode/
